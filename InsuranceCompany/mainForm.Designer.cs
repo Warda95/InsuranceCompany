@@ -41,14 +41,21 @@
             this.listCategory = new System.Windows.Forms.ListBox();
             this.dgvApp = new System.Windows.Forms.DataGridView();
             this.dgvCategory = new System.Windows.Forms.DataGridView();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.menuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dgv = new System.Windows.Forms.DataGridView();
+            this.refreshButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvApp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCategory)).BeginInit();
+            this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Location = new System.Drawing.Point(10, 24);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(64, 13);
             this.label1.TabIndex = 0;
@@ -57,7 +64,7 @@
             // listApps
             // 
             this.listApps.FormattingEnabled = true;
-            this.listApps.Location = new System.Drawing.Point(13, 26);
+            this.listApps.Location = new System.Drawing.Point(12, 40);
             this.listApps.Name = "listApps";
             this.listApps.Size = new System.Drawing.Size(182, 82);
             this.listApps.TabIndex = 1;
@@ -66,7 +73,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(200, 9);
+            this.label2.Location = new System.Drawing.Point(197, 24);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(49, 13);
             this.label2.TabIndex = 2;
@@ -97,7 +104,7 @@
             this.UpdateButton.TabIndex = 6;
             this.UpdateButton.Text = "Update";
             this.UpdateButton.UseVisualStyleBackColor = true;
-            this.UpdateButton.Click += new System.EventHandler(this.button1_Click);
+            this.UpdateButton.Click += new System.EventHandler(this.UpdateButton_Click);
             // 
             // ShowButton
             // 
@@ -136,7 +143,7 @@
             // listCategory
             // 
             this.listCategory.FormattingEnabled = true;
-            this.listCategory.Location = new System.Drawing.Point(201, 26);
+            this.listCategory.Location = new System.Drawing.Point(198, 40);
             this.listCategory.Name = "listCategory";
             this.listCategory.Size = new System.Drawing.Size(182, 82);
             this.listCategory.TabIndex = 3;
@@ -157,11 +164,56 @@
             this.dgvCategory.Size = new System.Drawing.Size(368, 140);
             this.dgvCategory.TabIndex = 12;
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(804, 24);
+            this.menuStrip1.TabIndex = 13;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // menuToolStripMenuItem
+            // 
+            this.menuToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addUserToolStripMenuItem});
+            this.menuToolStripMenuItem.Name = "menuToolStripMenuItem";
+            this.menuToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
+            this.menuToolStripMenuItem.Text = "Menu";
+            // 
+            // addUserToolStripMenuItem
+            // 
+            this.addUserToolStripMenuItem.Name = "addUserToolStripMenuItem";
+            this.addUserToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.addUserToolStripMenuItem.Text = "Add User";
+            this.addUserToolStripMenuItem.Click += new System.EventHandler(this.addUserToolStripMenuItem_Click);
+            // 
+            // dgv
+            // 
+            this.dgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv.Location = new System.Drawing.Point(15, 328);
+            this.dgv.Name = "dgv";
+            this.dgv.Size = new System.Drawing.Size(742, 150);
+            this.dgv.TabIndex = 14;
+            // 
+            // refreshButton
+            // 
+            this.refreshButton.Location = new System.Drawing.Point(613, 72);
+            this.refreshButton.Name = "refreshButton";
+            this.refreshButton.Size = new System.Drawing.Size(106, 23);
+            this.refreshButton.TabIndex = 15;
+            this.refreshButton.Text = "Refresh";
+            this.refreshButton.UseVisualStyleBackColor = true;
+            this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(804, 345);
+            this.ClientSize = new System.Drawing.Size(804, 486);
+            this.Controls.Add(this.refreshButton);
+            this.Controls.Add(this.dgv);
             this.Controls.Add(this.dgvCategory);
             this.Controls.Add(this.dgvApp);
             this.Controls.Add(this.Subtype);
@@ -175,11 +227,15 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.listApps);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.menuStrip1);
             this.Name = "mainForm";
             this.Text = "Insurance Company";
             this.Load += new System.EventHandler(this.mainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvApp)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCategory)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -200,6 +256,11 @@
         private System.Windows.Forms.ListBox listCategory;
         private System.Windows.Forms.DataGridView dgvApp;
         private System.Windows.Forms.DataGridView dgvCategory;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem menuToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addUserToolStripMenuItem;
+        private System.Windows.Forms.DataGridView dgv;
+        private System.Windows.Forms.Button refreshButton;
     }
 }
 

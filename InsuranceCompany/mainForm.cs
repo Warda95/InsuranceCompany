@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -14,14 +8,16 @@ namespace InsuranceCompany
 {
     public partial class mainForm : Form
     {
+        public static string tableName = "Customer";
         SqlConnection connection;
         string connectionString;
+        AddUserForm form;
 
         public mainForm()
         {
             InitializeComponent();
 
-            connectionString = ConfigurationManager.ConnectionStrings["InsuranceCompany.Properties.Settings.InsuranceCompanyConnectionString"].ConnectionString;
+            connectionString = ConfigurationManager.ConnectionStrings["InsuranceCompany.Properties.Settings.InsuranceCompanyConnectionString"].ConnectionString;            
         }
 
         private void appBindingNavigatorSaveItem_Click(object sender, EventArgs e)
@@ -31,8 +27,9 @@ namespace InsuranceCompany
 
         private void mainForm_Load(object sender, EventArgs e)
         {
-            TypicalCategories();
-            TypicalApps();
+            Categories();
+            Apps();
+            FillingGrid(tableName);
         }
 
         private void listApps_SelectedIndexChanged(object sender, EventArgs e)
@@ -40,7 +37,7 @@ namespace InsuranceCompany
 
         }
 
-        private void TypicalApps()
+        private void Apps()
         {
             using (connection = new SqlConnection(connectionString))
             using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM App", connection))
@@ -61,7 +58,7 @@ namespace InsuranceCompany
                 listApps.DataSource = appTable;
             }            
         }
-        private void TypicalCategories()
+        private void Categories()
         {
             using (connection = new SqlConnection(connectionString))
             using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Category", connection))
@@ -80,6 +77,42 @@ namespace InsuranceCompany
                 listCategory.DataSource = appTable;
             }
         }
+        
+        public void FillingGrid(string tableName)
+        {
+            using (connection = new SqlConnection(connectionString))
+            using (SqlDataAdapter adapter = new SqlDataAdapter(string.Format("SELECT * FROM {0}", tableName), connection))
+            {
+                DataTable appTable = new DataTable();
+                BindingSource bindingSource = new BindingSource();
+
+                adapter.Fill(appTable);
+                bindingSource.DataSource = appTable;
+                dgv.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
+                dgv.DataSource = bindingSource;
+            }
+        }
+
+        //private void AddButton_Click(object sender, EventArgs e)
+        //{
+        //    string date = DateTime.Now.ToShortDateString();
+        //    string query = string.Format("INSERT INTO {0} VALUES (@Name, @SecondName, @Birthdate, @MaritalStatus, @Job)", tableName);
+
+        //    using (connection = new SqlConnection(connectionString))
+        //    using (SqlCommand command = new SqlCommand(query, connection))
+        //    {
+        //        connection.Open();
+
+        //        command.Parameters.AddWithValue("@Name", "06-Jan-17");
+        //        command.Parameters.AddWithValue("@SecondName", "06-Jan-17");
+        //        command.Parameters.AddWithValue("@Birthdate", "06-Jan-17");
+        //        command.Parameters.AddWithValue("@MaritalStatus", "06-Jan-17");
+        //        command.Parameters.AddWithValue("@Job", "06-Jan-17");
+
+        //        command.ExecuteNonQuery();
+        //    }
+        //    FillingGrid(tableName);
+        //}
 
         private void AddButton_Click(object sender, EventArgs e)
         {
@@ -96,10 +129,10 @@ namespace InsuranceCompany
 
                 command.ExecuteNonQuery();
             }
-            TypicalCategories();
+            Categories();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void UpdateButton_Click(object sender, EventArgs e)
         {
             string date = DateTime.Now.ToShortDateString();
             string query = "UPDATE Category SET Type = @CategoryType WHERE Id = @CategoryID";
@@ -114,7 +147,18 @@ namespace InsuranceCompany
 
                 command.ExecuteNonQuery();
             }
-            TypicalCategories();
+            Categories();
+        }
+
+        private void addUserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            form = new AddUserForm();
+            form.Visible = true;
+        }
+
+        private void refreshButton_Click(object sender, EventArgs e)
+        {
+            FillingGrid(tableName);
         }
     }
 }
