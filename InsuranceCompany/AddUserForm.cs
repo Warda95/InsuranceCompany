@@ -5,13 +5,13 @@ using System.Windows.Forms;
 
 namespace InsuranceCompany
 {
-    public partial class AddUserForm : Form
+    public partial class addUserForm : Form
     {
-        mainForm form = new mainForm();
+        mainForm form = new mainForm("public");
         SqlConnection connection;
         string connectionString;
 
-        public AddUserForm()
+        public addUserForm()
         {
             InitializeComponent();
 
@@ -21,18 +21,21 @@ namespace InsuranceCompany
         private void okButton_Click(object sender, EventArgs e)
         {
             string date = DateTime.Now.ToShortDateString();
-            string query = string.Format("INSERT INTO {0} VALUES (@Name, @SecondName, @Birthdate, @MaritalStatus, @Job)", mainForm.tableName);
+            string query = string.Format("INSERT INTO {0} VALUES (@UserLogin, @UserPassword, @UserRole, @UserFirstName, @UserLastName, @UserBirthdate, @UserMaritalStatus, @UserJob)", mainForm.tableName);
 
             using (connection = new SqlConnection(connectionString))
             using (SqlCommand command = new SqlCommand(query, connection))
             {
                 connection.Open();
 
-                command.Parameters.AddWithValue("@Name", nameBox.Text);
-                command.Parameters.AddWithValue("@SecondName", secondNameBox.Text);
-                command.Parameters.AddWithValue("@Birthdate", birthDatePicker.Value.ToShortDateString());
-                command.Parameters.AddWithValue("@MaritalStatus", maritalStatusBox.Text);
-                command.Parameters.AddWithValue("@Job", jobBox.Text);
+                command.Parameters.AddWithValue("@UserLogin", usernameBox.Text);
+                command.Parameters.AddWithValue("@UserPassword", passwordBox.Text);
+                command.Parameters.AddWithValue("@UserRole", "Admin");
+                command.Parameters.AddWithValue("@UserFirstName", nameBox.Text);
+                command.Parameters.AddWithValue("@UserLastName", secondNameBox.Text);
+                command.Parameters.AddWithValue("@UserBirthdate", birthDatePicker.Value.ToShortDateString());
+                command.Parameters.AddWithValue("@UserMaritalStatus", maritalStatusBox.Text);
+                command.Parameters.AddWithValue("@UserJob", jobBox.Text);
 
                 if (nameBox.Text == "" | secondNameBox.Text == "" | maritalStatusBox.Text == "" | jobBox.Text == "")
                     MessageBox.Show("You need to insert all the values");
