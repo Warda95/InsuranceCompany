@@ -78,6 +78,96 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="addApplicationCriteriaDependenceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="addApplicationCriteriaDependenceForm.designer.cs">
+      <DependentUpon>addApplicationCriteriaDependenceForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="addApplicationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="addApplicationForm.designer.cs">
+      <DependentUpon>addApplicationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="addAttributeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="addAttributeForm.designer.cs">
+      <DependentUpon>addAttributeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="addAttributeValuesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="addAttributeValuesForm.designer.cs">
+      <DependentUpon>addAttributeValuesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="addCategoryAttributeDependenceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="addCategoryAttributeDependenceForm.designer.cs">
+      <DependentUpon>addCategoryAttributeDependenceForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="addCategoryCriterionDependenceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="addCategoryCriterionDependenceForm.designer.cs">
+      <DependentUpon>addCategoryCriterionDependenceForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="addCategoryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="addCategoryForm.designer.cs">
+      <DependentUpon>addCategoryForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="addCompensationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="addCompensationForm.designer.cs">
+      <DependentUpon>addCompensationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="addCriterionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="addCriterionForm.designer.cs">
+      <DependentUpon>addCriterionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="addCriterionValuesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="addCriterionValuesForm.designer.cs">
+      <DependentUpon>addCriterionValuesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="addDamageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="addDamageForm.designer.cs">
+      <DependentUpon>addDamageForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="addPolicyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="addPolicyForm.designer.cs">
+      <DependentUpon>addPolicyForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="addPolicyTypeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="addPolicyTypeForm.designer.cs">
+      <DependentUpon>addPolicyTypeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="addRateForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="addRateForm.designer.cs">
+      <DependentUpon>addRateForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="addUsersForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="addUsersForm.Designer.cs">
+      <DependentUpon>addUsersForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="addUserForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,6 +193,51 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="addApplicationCriteriaDependenceForm.resx">
+      <DependentUpon>addApplicationCriteriaDependenceForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="addApplicationForm.resx">
+      <DependentUpon>addApplicationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="addAttributeForm.resx">
+      <DependentUpon>addAttributeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="addAttributeValuesForm.resx">
+      <DependentUpon>addAttributeValuesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="addCategoryAttributeDependenceForm.resx">
+      <DependentUpon>addCategoryAttributeDependenceForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="addCategoryCriterionDependenceForm.resx">
+      <DependentUpon>addCategoryCriterionDependenceForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="addCategoryForm.resx">
+      <DependentUpon>addCategoryForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="addCompensationForm.resx">
+      <DependentUpon>addCompensationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="addCriterionForm.resx">
+      <DependentUpon>addCriterionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="addCriterionValuesForm.resx">
+      <DependentUpon>addCriterionValuesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="addDamageForm.resx">
+      <DependentUpon>addDamageForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="addPolicyForm.resx">
+      <DependentUpon>addPolicyForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="addPolicyTypeForm.resx">
+      <DependentUpon>addPolicyTypeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="addRateForm.resx">
+      <DependentUpon>addRateForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="addUsersForm.resx">
+      <DependentUpon>addUsersForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="addUserForm.resx">
       <DependentUpon>addUserForm.cs</DependentUpon>
     </EmbeddedResource>

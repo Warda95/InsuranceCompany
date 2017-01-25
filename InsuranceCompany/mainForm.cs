@@ -3,28 +3,44 @@ using System.Data;
 using System.Windows.Forms;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Collections.Generic;
 
 namespace InsuranceCompany
 {
     public partial class mainForm : Form
     {
-        public static string tableName = "Users";
+        public static string tableName = "Category";
         SqlConnection connection;
         string connectionString;
         addUserForm form1;
         loginForm form2;
-        //string userType = "public";
+        
+        addUsersForm form3;
+        addApplicationCriteriaDependenceForm form4;
+        addApplicationForm form5;
+        addAttributeForm form6;
+        addAttributeValuesForm form7;
+        addCategoryAttributeDependenceForm form8;
+        addCategoryCriterionDependenceForm form9;
+        addCategoryForm form10;
+        addCompensationForm form11;
+        addCriterionForm form12;
+        addCriterionValuesForm form13;
+        addDamageForm form14;
+        addPolicyForm form15;
+        addPolicyTypeForm form16;
+        addRateForm form17;
+
+        List<string> list;
+        string query;
 
         public mainForm(string userType)
         {
             InitializeComponent();
             connectionString = ConfigurationManager.ConnectionStrings["InsuranceCompany.Properties.Settings.InsuranceCompanyConnectionString"].ConnectionString;
 
-            //string query;
-
             if (userType == "admin")
             {
-                Console.WriteLine("pierwszy if");
                 AddButton.Enabled = true;
                 UpdateButton.Enabled = true;
                 ShowButton.Enabled = true;
@@ -44,9 +60,48 @@ namespace InsuranceCompany
                 usersToolStripMenuItem.Enabled = true;
                 //query = "GRANT ALL PRIVILEGES TO USER";
             }
+            else if (userType == "agent")
+            {
+                AddButton.Enabled = true;
+                UpdateButton.Enabled = true;
+                ShowButton.Enabled = true;
+                applicationToolStripMenuItem.Enabled = true;
+                applicationCriteriaDependenceToolStripMenuItem.Enabled = true;
+                attributeToolStripMenuItem.Enabled = true;
+                attributeValuesToolStripMenuItem.Enabled = true;
+                categoryAttributeDependenceToolStripMenuItem.Enabled = true;
+                categoryCriterionDepenceToolStripMenuItem.Enabled = true;
+                compensationToolStripMenuItem.Enabled = true;
+                criterionToolStripMenuItem.Enabled = true;
+                criterionValuesToolStripMenuItem.Enabled = true;
+                damageToolStripMenuItem.Enabled = true;
+                policyToolStripMenuItem.Enabled = true;
+                policyTypeToolStripMenuItem.Enabled = true;
+                rateToolStripMenuItem.Enabled = true;
+                usersToolStripMenuItem.Enabled = true;
+            }
+            else if (userType == "client")
+            {
+                AddButton.Enabled = false;
+                UpdateButton.Enabled = false;
+                ShowButton.Enabled = true;
+                applicationToolStripMenuItem.Enabled = false;
+                applicationCriteriaDependenceToolStripMenuItem.Enabled = false;
+                attributeToolStripMenuItem.Enabled = false;
+                attributeValuesToolStripMenuItem.Enabled = false;
+                categoryAttributeDependenceToolStripMenuItem.Enabled = false;
+                categoryCriterionDepenceToolStripMenuItem.Enabled = false;
+                compensationToolStripMenuItem.Enabled = false;
+                criterionToolStripMenuItem.Enabled = false;
+                criterionValuesToolStripMenuItem.Enabled = false;
+                damageToolStripMenuItem.Enabled = false;
+                policyToolStripMenuItem.Enabled = false;
+                policyTypeToolStripMenuItem.Enabled = false;
+                rateToolStripMenuItem.Enabled = false;
+                usersToolStripMenuItem.Enabled = false;
+            }
             else if (userType == "public")
             {
-                Console.WriteLine("drugi if");
                 AddButton.Enabled = false;
                 UpdateButton.Enabled = false;
                 ShowButton.Enabled = false;
@@ -169,57 +224,415 @@ namespace InsuranceCompany
 
         private void AddButton_Click(object sender, EventArgs e)
         {
-            string date = DateTime.Now.ToShortDateString();
-            string query = "INSERT INTO Category VALUES (@CategoryType, @CategorySubtype)";
-
-            using (connection = new SqlConnection(connectionString))
-            using (SqlCommand command = new SqlCommand(query, connection))
+            if (tableName == "Application")
             {
-                //connection.Open();
+                list = new List<string>();
+                list.Add("@ID");
+                list.Add("@UserID");
+                list.Add("@CategoryID");
+                list.Add("@ApplicationName");
+                list.Add("@ApplicationDate");
 
-                //command.Parameters.AddWithValue("@CategoryType", textAddType.Text);
-                //command.Parameters.AddWithValue("@CategorySubtype", textAddSubtype.Text);
-
-                //command.ExecuteNonQuery();
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4})", mainForm.tableName,
+                    list[1], list[2], list[3], list[4]);
+                form5 = new addApplicationForm(list, query);
+                form5.Visible = true;
             }
-            Categories();
+            else if (tableName == "ApplicationCriteriaDependence")
+            {
+                list = new List<string>();
+                list.Add("@ID");
+                list.Add("@DependenceName");
+                list.Add("@ApplicationID");
+                list.Add("@CriterionID");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3})", mainForm.tableName,
+                    list[1], list[2], list[3]);
+                form4 = new addApplicationCriteriaDependenceForm(list, query);
+                form4.Visible = true;
+            }
+            else if (tableName == "Attribute")
+            {
+                list = new List<string>();
+                list.Add("@ID");
+                list.Add("@AttributeName");
+                
+                query = string.Format("INSERT INTO {0} VALUES ({1})", mainForm.tableName,
+                    list[1]);
+                form6 = new addAttributeForm(list, query);
+                form6.Visible = true;
+            }
+            else if (tableName == "AttributeValues")
+            {
+                list = new List<string>();
+                list.Add("@ID");
+                list.Add("@AttributeValue1");
+                list.Add("@AttributeValue2");
+                list.Add("@CategoryID");
+                list.Add("@AttributeID");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4})", mainForm.tableName,
+                    list[1], list[2], list[3], list[4]);
+                form7 = new addAttributeValuesForm(list, query);
+                form7.Visible = true;
+            }
+            else if (tableName == "Category")
+            {
+                list = new List<string>();
+                list.Add("@ID");
+                list.Add("@Type");
+                list.Add("@Subtype");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2})", mainForm.tableName,
+                    list[1], list[2]);
+                form10 = new addCategoryForm(list, query);
+                form10.Visible = true;
+            }
+            else if (tableName == "CategoryAttributeDependence")
+            {
+                list = new List<string>();
+                list.Add("@ID");
+                list.Add("@DependenceName");
+                list.Add("@CategoryID");
+                list.Add("@AttributeID");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3})", mainForm.tableName,
+                    list[1], list[2], list[3]);
+                form8 = new addCategoryAttributeDependenceForm(list, query);
+                form8.Visible = true;
+            }
+            else if (tableName == "CategoryCriterionDependence")
+            {
+                list = new List<string>();
+                list.Add("@ID");
+                list.Add("@DependenceName");
+                list.Add("@CategoryID");
+                list.Add("@CriterionID");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3})", mainForm.tableName,
+                    list[1], list[2], list[3]);
+                form9 = new addCategoryCriterionDependenceForm(list, query);
+                form9.Visible = true;
+            }
+            else if (tableName == "Compensation")
+            {
+                list = new List<string>();
+                list.Add("@ID");
+                list.Add("@DamageID");
+                list.Add("@CompensationName");
+                list.Add("@CompensationDate");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3})", mainForm.tableName,
+                    list[1], list[2], list[3]);
+                form11 = new addCompensationForm(list, query);
+                form11.Visible = true;
+            }
+            else if (tableName == "Criterion")
+            {
+                list = new List<string>();
+                list.Add("@ID");
+                list.Add("@CriterionName");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1})", mainForm.tableName,
+                    list[1]);
+                form12 = new addCriterionForm(list, query);
+                form12.Visible = true;
+            }
+            else if (tableName == "CriterionValues")
+            {
+                list = new List<string>();
+                list.Add("@ID");
+                list.Add("@Value1");
+                list.Add("@Value2");
+                list.Add("@CategoryID");
+                list.Add("@CriterionID");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4})", mainForm.tableName,
+                    list[1], list[2], list[3], list[4]);
+                form13 = new addCriterionValuesForm(list, query);
+                form13.Visible = true;
+            }
+            else if (tableName == "Damage")
+            {
+                list = new List<string>();
+                list.Add("@ID");
+                list.Add("@PolicyID");
+                list.Add("@Type");
+                list.Add("@Rate");
+                list.Add("@Cost");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4})", mainForm.tableName,
+                    list[1], list[2], list[3], list[4]);
+                form14 = new addDamageForm(list, query);
+                form14.Visible = true;
+            }
+            else if (tableName == "Policy")
+            {
+                list = new List<string>();
+                list.Add("@ID");
+                list.Add("@PolicyTypeID");
+                list.Add("@ApplicationID");
+                list.Add("@Name");
+                list.Add("@FromDate");
+                list.Add("@ToDate");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4}, {5})", mainForm.tableName,
+                    list[1], list[2], list[3], list[4], list[5]);
+                form15 = new addPolicyForm(list, query);
+                form15.Visible = true;
+            }
+            else if (tableName == "PolicyType")
+            {
+                list = new List<string>();
+                list.Add("@ID");
+                list.Add("@RateID");
+                list.Add("@CategoryID");
+                list.Add("@PolicyTypeName");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3})", mainForm.tableName,
+                    list[1], list[2], list[3]);
+                form16 = new addPolicyTypeForm(list, query);
+                form16.Visible = true;
+            }
+            else if (tableName == "Rate")
+            {
+                list = new List<string>();
+                list.Add("@ID");
+                list.Add("@CriterionID");
+                list.Add("@RateName");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2})", mainForm.tableName,
+                    list[1], list[2]);
+                form17 = new addRateForm(list, query);
+                form17.Visible = true;
+            }
+            else if (tableName == "Users")
+            {
+                list = new List<string>();
+                list.Add("@ID");
+                list.Add("@UserLogin");
+                list.Add("@UserPassword");
+                list.Add("@UserFirstName");
+                list.Add("@UserLastName");
+                list.Add("@UserBirthDate");
+                list.Add("@UserMaritalStatus");
+                list.Add("@UserJob");
+                list.Add("@UserRole");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4}, {5}, {6}, {7}, {8})", mainForm.tableName,
+                    list[1], list[2], list[3], list[4], list[5], list[6], list[7], list[8]);
+                form3 = new addUsersForm(list, query);
+                form3.Visible = true;
+            }
         }
 
         private void UpdateButton_Click(object sender, EventArgs e)
         {
-            string date = DateTime.Now.ToShortDateString();
-            string query = "UPDATE Category SET Type = @CategoryType WHERE Id = @CategoryID";
-
-            using (connection = new SqlConnection(connectionString))
-            using (SqlCommand command = new SqlCommand(query, connection))
+            if (tableName == "Application")
             {
-                //connection.Open();
+                list = new List<string>();
+                list.Add("ID");
+                list.Add("UserID");
+                list.Add("CategoryID");
+                list.Add("ApplicationName");
+                list.Add("ApplicationDate");
 
-                //command.Parameters.AddWithValue("@CategoryType", textAddType.Text);
-                //command.Parameters.AddWithValue("@CategoryID", listCategory.SelectedValue);
-
-                //command.ExecuteNonQuery();
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4})", mainForm.tableName,
+                    list[1], list[2], list[3], list[4]);
+                form5 = new addApplicationForm(list, query);
+                form5.Visible = true;
             }
-            Categories();
+            else if (tableName == "ApplicationCriteriaDependence")
+            {
+                list = new List<string>();
+                list.Add("ID");
+                list.Add("DependenceName");
+                list.Add("ApplicationID");
+                list.Add("CriterionID");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3})", mainForm.tableName,
+                    list[1], list[2], list[3]);
+                form4 = new addApplicationCriteriaDependenceForm(list, query);
+                form4.Visible = true;
+            }
+            else if (tableName == "Attribute")
+            {
+                list = new List<string>();
+                list.Add("ID");
+                list.Add("AttributeName");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1})", mainForm.tableName,
+                    list[1]);
+                form6 = new addAttributeForm(list, query);
+                form6.Visible = true;
+            }
+            else if (tableName == "AttributeValues")
+            {
+                list = new List<string>();
+                list.Add("ID");
+                list.Add("AttributeValue1");
+                list.Add("AttributeValue2");
+                list.Add("CategoryID");
+                list.Add("AttributeID");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4})", mainForm.tableName,
+                    list[1], list[2], list[3], list[4]);
+                form7 = new addAttributeValuesForm(list, query);
+                form7.Visible = true;
+            }
+            else if (tableName == "Category")
+            {
+                list = new List<string>();
+                list.Add("ID");
+                list.Add("Type");
+                list.Add("Subtype");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2})", mainForm.tableName,
+                    list[1], list[2]);
+                form10 = new addCategoryForm(list, query);
+                form10.Visible = true;
+            }
+            else if (tableName == "CategoryAttributeDependence")
+            {
+                list = new List<string>();
+                list.Add("ID");
+                list.Add("DependenceName");
+                list.Add("CategoryID");
+                list.Add("AttributeID");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3})", mainForm.tableName,
+                    list[1], list[2], list[3]);
+                form8 = new addCategoryAttributeDependenceForm(list, query);
+                form8.Visible = true;
+            }
+            else if (tableName == "CategoryCriterionDependence")
+            {
+                list = new List<string>();
+                list.Add("ID");
+                list.Add("DependenceName");
+                list.Add("CategoryID");
+                list.Add("CriterionID");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3})", mainForm.tableName,
+                    list[1], list[2], list[3]);
+                form9 = new addCategoryCriterionDependenceForm(list, query);
+                form9.Visible = true;
+            }
+            else if (tableName == "Compensation")
+            {
+                list = new List<string>();
+                list.Add("ID");
+                list.Add("DamageID");
+                list.Add("CompensationName");
+                list.Add("CompensationDate");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3})", mainForm.tableName,
+                    list[1], list[2], list[3]);
+                form11 = new addCompensationForm(list, query);
+                form11.Visible = true;
+            }
+            else if (tableName == "Criterion")
+            {
+                list = new List<string>();
+                list.Add("ID");
+                list.Add("CriterionName");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1})", mainForm.tableName,
+                    list[1]);
+                form12 = new addCriterionForm(list, query);
+                form12.Visible = true;
+            }
+            else if (tableName == "CriterionValues")
+            {
+                list = new List<string>();
+                list.Add("ID");
+                list.Add("Value1");
+                list.Add("Value2");
+                list.Add("CategoryID");
+                list.Add("CriterionID");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4})", mainForm.tableName,
+                    list[1], list[2], list[3], list[4]);
+                form13 = new addCriterionValuesForm(list, query);
+                form13.Visible = true;
+            }
+            else if (tableName == "Damage")
+            {
+                list = new List<string>();
+                list.Add("ID");
+                list.Add("PolicyID");
+                list.Add("Type");
+                list.Add("Rate");
+                list.Add("Cost");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4})", mainForm.tableName,
+                    list[1], list[2], list[3], list[4]);
+                form14 = new addDamageForm(list, query);
+                form14.Visible = true;
+            }
+            else if (tableName == "Policy")
+            {
+                list = new List<string>();
+                list.Add("ID");
+                list.Add("PolicyTypeID");
+                list.Add("ApplicationID");
+                list.Add("Name");
+                list.Add("FromDate");
+                list.Add("ToDate");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4}, {5})", mainForm.tableName,
+                    list[1], list[2], list[3], list[4], list[5]);
+                form15 = new addPolicyForm(list, query);
+                form15.Visible = true;
+            }
+            else if (tableName == "PolicyType")
+            {
+                list = new List<string>();
+                list.Add("ID");
+                list.Add("RateID");
+                list.Add("CategoryID");
+                list.Add("PolicyTypeName");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3})", mainForm.tableName,
+                    list[1], list[2], list[3]);
+                form16 = new addPolicyTypeForm(list, query);
+                form16.Visible = true;
+            }
+            else if (tableName == "Rate")
+            {
+                list = new List<string>();
+                list.Add("ID");
+                list.Add("CriterionID");
+                list.Add("RateName");
+
+                query = string.Format("INSERT INTO {0} VALUES ({1}, {2})", mainForm.tableName,
+                    list[1], list[2]);
+                form17 = new addRateForm(list, query);
+                form17.Visible = true;
+            }
+            else if (tableName == "Users")
+            {
+                list = new List<string>();
+                list.Add("ID");
+                list.Add("UserLogin");
+                list.Add("UserPassword");
+                list.Add("UserFirstName");
+                list.Add("UserLastName");
+                list.Add("UserBirthDate");
+                list.Add("UserMaritalStatus");
+                list.Add("UserJob");
+                list.Add("UserRole");
+
+                query = string.Format("UPDATE {0} SET {1}=@{1}, {2}=@{2}, {3}=@{3}, {4}=@{4}, {5}=@{5}, {6}=@{6}, {7}=@{7}, {8}=@{8} WHERE {9}=@{9}", mainForm.tableName,
+                    list[1], list[2], list[3], list[4], list[5], list[6], list[7], list[8], list[0]);
+                form3 = new addUsersForm(list, query);
+                form3.Visible = true;
+            }
         }
 
-        private void addUserToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            form1 = new addUserForm();
-            form1.Visible = true;
-        }
-
-        private void refreshButton_Click(object sender, EventArgs e)
-        {
-            FillingGrid(tableName);
-        }
-
-        private void loginToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            form2 = new loginForm();
-            form2.Visible = true;
-            this.Hide();
-        }
+                            //////////////////////
+                            ////// BUTTONS ///////
+                            //////////////////////
 
         private void applicationToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -308,6 +721,36 @@ namespace InsuranceCompany
         private void usersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             tableName = "Users";
+            FillingGrid(tableName);
+        }
+
+                                //////////////////////
+                                ///// TOOLSTRIPS /////
+                                //////////////////////
+                                
+        private void registerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            form1 = new addUserForm();
+            form1.Visible = true;
+            this.Hide();
+        }
+        
+        private void loginToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            form2 = new loginForm();
+            form2.Visible = true;
+            this.Hide();
+        }
+        
+        private void addUserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            form1 = new addUserForm();
+            form1.Visible = true;
+            this.Hide();
+        }
+
+        private void refreshButton_Click(object sender, EventArgs e)
+        {
             FillingGrid(tableName);
         }
     }

@@ -7,7 +7,7 @@ namespace InsuranceCompany
 {
     public partial class addUserForm : Form
     {
-        mainForm form = new mainForm("public");
+        mainForm form;
         SqlConnection connection;
         string connectionString;
 
@@ -30,20 +30,29 @@ namespace InsuranceCompany
 
                 command.Parameters.AddWithValue("@UserLogin", usernameBox.Text);
                 command.Parameters.AddWithValue("@UserPassword", passwordBox.Text);
-                command.Parameters.AddWithValue("@UserRole", "Admin");
+                command.Parameters.AddWithValue("@UserRole", "client");
                 command.Parameters.AddWithValue("@UserFirstName", nameBox.Text);
                 command.Parameters.AddWithValue("@UserLastName", secondNameBox.Text);
                 command.Parameters.AddWithValue("@UserBirthdate", birthDatePicker.Value.ToShortDateString());
                 command.Parameters.AddWithValue("@UserMaritalStatus", maritalStatusBox.Text);
                 command.Parameters.AddWithValue("@UserJob", jobBox.Text);
 
-                if (nameBox.Text == "" | secondNameBox.Text == "" | maritalStatusBox.Text == "" | jobBox.Text == "")
+                if (usernameBox.Text == "" || passwordBox.Text == "" || nameBox.Text == "" || secondNameBox.Text == "" || 
+                    maritalStatusBox.Text == "" || jobBox.Text == "")
                     MessageBox.Show("You need to insert all the values");
                 else
                     command.ExecuteNonQuery();
             }
-            if (nameBox.Text != "" & secondNameBox.Text != "" & maritalStatusBox.Text != "" & jobBox.Text != "")
+            if (usernameBox.Text == "" || passwordBox.Text == "" || nameBox.Text == "" || secondNameBox.Text == "" ||
+                maritalStatusBox.Text == "" || jobBox.Text == "")
                 Close();
+        }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            form = new mainForm("public");
+            form.Show();
+            Close();
         }
     }
 }
