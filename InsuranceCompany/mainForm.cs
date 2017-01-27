@@ -13,37 +13,26 @@ namespace InsuranceCompany
         SqlConnection connection;
         string connectionString;
         addUserForm form1;
-        loginForm form2;
-        
-        addUsersForm form3;
-        addApplicationCriteriaDependenceForm form4;
-        addApplicationForm form5;
-        addAttributeForm form6;
-        addAttributeValuesForm form7;
-        addCategoryAttributeDependenceForm form8;
-        addCategoryCriterionDependenceForm form9;
-        addCategoryForm form10;
-        addCompensationForm form11;
-        addCriterionForm form12;
-        addCriterionValuesForm form13;
-        addDamageForm form14;
-        addPolicyForm form15;
-        addPolicyTypeForm form16;
-        addRateForm form17;
+        loginForm form2;        
+        addForm form3;
 
         List<string> list;
         string query;
+        string userType;
+        string userLoginName;
 
-        public mainForm(string userType)
+        public mainForm(string inUserType, string inUserID)
         {
             InitializeComponent();
             connectionString = ConfigurationManager.ConnectionStrings["InsuranceCompany.Properties.Settings.InsuranceCompanyConnectionString"].ConnectionString;
+            userType = inUserType;
+            userLoginName = inUserID;
 
             if (userType == "admin")
             {
                 AddButton.Enabled = true;
                 UpdateButton.Enabled = true;
-                ShowButton.Enabled = true;
+                deleteButton.Enabled = true;
                 applicationToolStripMenuItem.Enabled = true;
                 applicationCriteriaDependenceToolStripMenuItem.Enabled = true;
                 attributeToolStripMenuItem.Enabled = true;
@@ -58,13 +47,36 @@ namespace InsuranceCompany
                 policyTypeToolStripMenuItem.Enabled = true;
                 rateToolStripMenuItem.Enabled = true;
                 usersToolStripMenuItem.Enabled = true;
-                //query = "GRANT ALL PRIVILEGES TO USER";
+                bool deleteUserAccess = true;
             }
             else if (userType == "agent")
             {
                 AddButton.Enabled = true;
                 UpdateButton.Enabled = true;
-                ShowButton.Enabled = true;
+                deleteButton.Enabled = true;
+                applicationToolStripMenuItem.Enabled = true;
+                applicationCriteriaDependenceToolStripMenuItem.Enabled = true;
+                attributeToolStripMenuItem.Enabled = true;
+                attributeValuesToolStripMenuItem.Enabled = true;
+                categoryAttributeDependenceToolStripMenuItem.Enabled = true;
+                categoryCriterionDepenceToolStripMenuItem.Enabled = true;
+                compensationToolStripMenuItem.Enabled = true;
+                criterionToolStripMenuItem.Enabled = true;
+                criterionValuesToolStripMenuItem.Enabled = true;
+                damageToolStripMenuItem.Enabled = true;
+                policyToolStripMenuItem.Enabled = true;
+                policyTypeToolStripMenuItem.Enabled = true;
+                rateToolStripMenuItem.Enabled = true;
+                usersToolStripMenuItem.Enabled = true;
+                bool deleteUserAccess;
+            }
+            else if (userType == "client")
+            {
+                addUserToolStripMenuItem.Enabled = false;
+                deleteBox.Enabled = false;
+                AddButton.Enabled = false;
+                UpdateButton.Enabled = false;
+                deleteButton.Enabled = false;
                 applicationToolStripMenuItem.Enabled = true;
                 applicationCriteriaDependenceToolStripMenuItem.Enabled = true;
                 attributeToolStripMenuItem.Enabled = true;
@@ -80,147 +92,69 @@ namespace InsuranceCompany
                 rateToolStripMenuItem.Enabled = true;
                 usersToolStripMenuItem.Enabled = true;
             }
-            else if (userType == "client")
-            {
-                AddButton.Enabled = false;
-                UpdateButton.Enabled = false;
-                ShowButton.Enabled = true;
-                applicationToolStripMenuItem.Enabled = false;
-                applicationCriteriaDependenceToolStripMenuItem.Enabled = false;
-                attributeToolStripMenuItem.Enabled = false;
-                attributeValuesToolStripMenuItem.Enabled = false;
-                categoryAttributeDependenceToolStripMenuItem.Enabled = false;
-                categoryCriterionDepenceToolStripMenuItem.Enabled = false;
-                compensationToolStripMenuItem.Enabled = false;
-                criterionToolStripMenuItem.Enabled = false;
-                criterionValuesToolStripMenuItem.Enabled = false;
-                damageToolStripMenuItem.Enabled = false;
-                policyToolStripMenuItem.Enabled = false;
-                policyTypeToolStripMenuItem.Enabled = false;
-                rateToolStripMenuItem.Enabled = false;
-                usersToolStripMenuItem.Enabled = false;
-            }
             else if (userType == "public")
             {
+                addUserToolStripMenuItem.Enabled = false;
+                deleteBox.Enabled = false;
                 AddButton.Enabled = false;
                 UpdateButton.Enabled = false;
-                ShowButton.Enabled = false;
+                deleteButton.Enabled = false;
                 applicationToolStripMenuItem.Enabled = false;
                 applicationCriteriaDependenceToolStripMenuItem.Enabled = false;
-                attributeToolStripMenuItem.Enabled = false;
+                attributeToolStripMenuItem.Enabled = true;
                 attributeValuesToolStripMenuItem.Enabled = false;
                 categoryAttributeDependenceToolStripMenuItem.Enabled = false;
                 categoryCriterionDepenceToolStripMenuItem.Enabled = false;
                 compensationToolStripMenuItem.Enabled = false;
-                criterionToolStripMenuItem.Enabled = false;
+                criterionToolStripMenuItem.Enabled = true;
                 criterionValuesToolStripMenuItem.Enabled = false;
                 damageToolStripMenuItem.Enabled = false;
                 policyToolStripMenuItem.Enabled = false;
                 policyTypeToolStripMenuItem.Enabled = false;
                 rateToolStripMenuItem.Enabled = false;
                 usersToolStripMenuItem.Enabled = false;
-                //query = "REVOKE ALL PRIVILEGES FROM USER";
             }
-            else Console.WriteLine("Jeb sie");
 
-            //using (connection = new SqlConnection(connectionString))
-            //using (SqlCommand command = new SqlCommand(query, connection))
-            //{
-            //    connection.Open();
-            //    command.ExecuteNonQuery();
-            //}
+            FillingGrid(tableName);
         }
         
         private void mainForm_Load(object sender, EventArgs e)
         {
-            Categories();
-            Apps();
             FillingGrid(tableName);
-        }
-        
-        private void Apps()
-        {
-            using (connection = new SqlConnection(connectionString))
-            using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Application", connection))
-            {
-                DataTable appTable = new DataTable();
-                BindingSource bindingSource = new BindingSource();
-
-                adapter.Fill(appTable);
-                bindingSource.DataSource = appTable;
-                //dgvApp.AutoResizeColumns(
-                //DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
-                //dgvApp.DataSource = bindingSource;
-
-                //listApps.ValueMember = "CustomerID";
-                //listApps.DisplayMember = "ApplicationDate";
-                //listApps.DisplayMember = "ApplicationName";
-                //listApps.ValueMember = "ID";
-                //listApps.DataSource = appTable;
-            }            
-        }
-        private void Categories()
-        {
-            using (connection = new SqlConnection(connectionString))
-            using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Category", connection))
-            {
-                DataTable appTable = new DataTable();
-                BindingSource bindingSource = new BindingSource();
-                
-                adapter.Fill(appTable);
-                bindingSource.DataSource = appTable;
-                //dgvCategory.AutoResizeColumns(
-                //DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
-                //dgvCategory.DataSource = bindingSource;
-                
-                //listCategory.DisplayMember = "CategoryType";
-                //listCategory.ValueMember = "ID";
-                //listCategory.DataSource = appTable;
-            }
         }
         
         public void FillingGrid(string tableName)
         {
+            if (userType == "client" && tableName == "Users")
+                query = string.Format("SELECT * FROM Users WHERE ID={0}", userLoginName);
+            else if (userType == "client" && tableName == "Application")
+                query = string.Format("SELECT * FROM Application WHERE UserID={0}", userLoginName);
+            else if (userType == "client" && tableName == "Policy")
+                query = string.Format("SELECT * FROM Policy WHERE ApplicationID IN (SELECT ID FROM Application WHERE UserID={0})", userLoginName);
+            else if (userType == "client" && tableName == "Damage")
+                query = string.Format("SELECT * FROM Damage WHERE PolicyID IN (Select ID FROM Policy WHERE ApplicationID IN (SELECT ID FROM Application WHERE UserID={0}))", userLoginName);
+            else if (userType == "client" && tableName == "Compensation")
+                query = string.Format("SELECT * FROM Compensation WHERE DamageID IN (SELECT ID FROM Damage WHERE PolicyID IN (Select ID FROM Policy WHERE ApplicationID IN (SELECT ID FROM Application WHERE UserID={0})))", userLoginName);
+            else
+                query = string.Format("SELECT * FROM {0}", tableName);
+
             using (connection = new SqlConnection(connectionString))
-            using (SqlDataAdapter adapter = new SqlDataAdapter(string.Format("SELECT * FROM {0}", tableName), connection))
+            using (SqlDataAdapter adapter = new SqlDataAdapter(query, connection))
             {
                 DataTable appTable = new DataTable();
                 BindingSource bindingSource = new BindingSource();
 
                 adapter.Fill(appTable);
                 bindingSource.DataSource = appTable;
-                //dgv.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
                 int i = 0;
                 foreach (DataGridViewColumn c in dgv.Columns)
                 {
                     i += c.Width;
                 }
                 dgv.Width = i + dgv.RowHeadersWidth + 2;
-                //dgv.Height = dgv.GetRowDisplayRectangle(dgv.NewRowIndex, true).Bottom + dgv.GetRowDisplayRectangle(dgv.NewRowIndex, false).Height;
                 dgv.DataSource = bindingSource;
             }
         }
-
-        //private void AddButton_Click(object sender, EventArgs e)
-        //{
-        //    string date = DateTime.Now.ToShortDateString();
-        //    string query = string.Format("INSERT INTO {0} VALUES (@Name, @SecondName, @Birthdate, @MaritalStatus, @Job)", tableName);
-
-        //    using (connection = new SqlConnection(connectionString))
-        //    using (SqlCommand command = new SqlCommand(query, connection))
-        //    {
-        //        connection.Open();
-
-        //        command.Parameters.AddWithValue("@Name", "06-Jan-17");
-        //        command.Parameters.AddWithValue("@SecondName", "06-Jan-17");
-        //        command.Parameters.AddWithValue("@Birthdate", "06-Jan-17");
-        //        command.Parameters.AddWithValue("@MaritalStatus", "06-Jan-17");
-        //        command.Parameters.AddWithValue("@Job", "06-Jan-17");
-
-        //        command.ExecuteNonQuery();
-        //    }
-        //    FillingGrid(tableName);
-        //}
 
         private void AddButton_Click(object sender, EventArgs e)
         {
@@ -235,8 +169,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4})", mainForm.tableName,
                     list[1], list[2], list[3], list[4]);
-                form5 = new addApplicationForm(list, query);
-                form5.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "ApplicationCriteriaDependence")
             {
@@ -248,8 +182,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3})", mainForm.tableName,
                     list[1], list[2], list[3]);
-                form4 = new addApplicationCriteriaDependenceForm(list, query);
-                form4.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "Attribute")
             {
@@ -259,8 +193,8 @@ namespace InsuranceCompany
                 
                 query = string.Format("INSERT INTO {0} VALUES ({1})", mainForm.tableName,
                     list[1]);
-                form6 = new addAttributeForm(list, query);
-                form6.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "AttributeValues")
             {
@@ -273,8 +207,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4})", mainForm.tableName,
                     list[1], list[2], list[3], list[4]);
-                form7 = new addAttributeValuesForm(list, query);
-                form7.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "Category")
             {
@@ -285,8 +219,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2})", mainForm.tableName,
                     list[1], list[2]);
-                form10 = new addCategoryForm(list, query);
-                form10.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "CategoryAttributeDependence")
             {
@@ -298,8 +232,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3})", mainForm.tableName,
                     list[1], list[2], list[3]);
-                form8 = new addCategoryAttributeDependenceForm(list, query);
-                form8.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "CategoryCriterionDependence")
             {
@@ -311,8 +245,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3})", mainForm.tableName,
                     list[1], list[2], list[3]);
-                form9 = new addCategoryCriterionDependenceForm(list, query);
-                form9.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "Compensation")
             {
@@ -324,8 +258,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3})", mainForm.tableName,
                     list[1], list[2], list[3]);
-                form11 = new addCompensationForm(list, query);
-                form11.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "Criterion")
             {
@@ -335,8 +269,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1})", mainForm.tableName,
                     list[1]);
-                form12 = new addCriterionForm(list, query);
-                form12.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "CriterionValues")
             {
@@ -349,8 +283,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4})", mainForm.tableName,
                     list[1], list[2], list[3], list[4]);
-                form13 = new addCriterionValuesForm(list, query);
-                form13.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "Damage")
             {
@@ -363,8 +297,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4})", mainForm.tableName,
                     list[1], list[2], list[3], list[4]);
-                form14 = new addDamageForm(list, query);
-                form14.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "Policy")
             {
@@ -378,8 +312,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4}, {5})", mainForm.tableName,
                     list[1], list[2], list[3], list[4], list[5]);
-                form15 = new addPolicyForm(list, query);
-                form15.Visible = true;
+                form3 = new addForm(list, query, tableName);
+                form3.Visible = true;
             }
             else if (tableName == "PolicyType")
             {
@@ -391,8 +325,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3})", mainForm.tableName,
                     list[1], list[2], list[3]);
-                form16 = new addPolicyTypeForm(list, query);
-                form16.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "Rate")
             {
@@ -403,8 +337,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2})", mainForm.tableName,
                     list[1], list[2]);
-                form17 = new addRateForm(list, query);
-                form17.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "Users")
             {
@@ -421,7 +355,7 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4}, {5}, {6}, {7}, {8})", mainForm.tableName,
                     list[1], list[2], list[3], list[4], list[5], list[6], list[7], list[8]);
-                form3 = new addUsersForm(list, query);
+                form3 = new addForm(list, query);
                 form3.Visible = true;
             }
         }
@@ -439,8 +373,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4})", mainForm.tableName,
                     list[1], list[2], list[3], list[4]);
-                form5 = new addApplicationForm(list, query);
-                form5.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "ApplicationCriteriaDependence")
             {
@@ -452,8 +386,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3})", mainForm.tableName,
                     list[1], list[2], list[3]);
-                form4 = new addApplicationCriteriaDependenceForm(list, query);
-                form4.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "Attribute")
             {
@@ -463,8 +397,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1})", mainForm.tableName,
                     list[1]);
-                form6 = new addAttributeForm(list, query);
-                form6.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "AttributeValues")
             {
@@ -477,8 +411,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4})", mainForm.tableName,
                     list[1], list[2], list[3], list[4]);
-                form7 = new addAttributeValuesForm(list, query);
-                form7.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "Category")
             {
@@ -489,8 +423,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2})", mainForm.tableName,
                     list[1], list[2]);
-                form10 = new addCategoryForm(list, query);
-                form10.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "CategoryAttributeDependence")
             {
@@ -502,8 +436,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3})", mainForm.tableName,
                     list[1], list[2], list[3]);
-                form8 = new addCategoryAttributeDependenceForm(list, query);
-                form8.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "CategoryCriterionDependence")
             {
@@ -515,8 +449,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3})", mainForm.tableName,
                     list[1], list[2], list[3]);
-                form9 = new addCategoryCriterionDependenceForm(list, query);
-                form9.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "Compensation")
             {
@@ -528,8 +462,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3})", mainForm.tableName,
                     list[1], list[2], list[3]);
-                form11 = new addCompensationForm(list, query);
-                form11.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "Criterion")
             {
@@ -539,8 +473,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1})", mainForm.tableName,
                     list[1]);
-                form12 = new addCriterionForm(list, query);
-                form12.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "CriterionValues")
             {
@@ -553,8 +487,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4})", mainForm.tableName,
                     list[1], list[2], list[3], list[4]);
-                form13 = new addCriterionValuesForm(list, query);
-                form13.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "Damage")
             {
@@ -567,8 +501,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4})", mainForm.tableName,
                     list[1], list[2], list[3], list[4]);
-                form14 = new addDamageForm(list, query);
-                form14.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "Policy")
             {
@@ -582,8 +516,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4}, {5})", mainForm.tableName,
                     list[1], list[2], list[3], list[4], list[5]);
-                form15 = new addPolicyForm(list, query);
-                form15.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "PolicyType")
             {
@@ -595,8 +529,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3})", mainForm.tableName,
                     list[1], list[2], list[3]);
-                form16 = new addPolicyTypeForm(list, query);
-                form16.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "Rate")
             {
@@ -607,8 +541,8 @@ namespace InsuranceCompany
 
                 query = string.Format("INSERT INTO {0} VALUES ({1}, {2})", mainForm.tableName,
                     list[1], list[2]);
-                form17 = new addRateForm(list, query);
-                form17.Visible = true;
+                form3 = new addForm(list, query);
+                form3.Visible = true;
             }
             else if (tableName == "Users")
             {
@@ -625,7 +559,7 @@ namespace InsuranceCompany
 
                 query = string.Format("UPDATE {0} SET {1}=@{1}, {2}=@{2}, {3}=@{3}, {4}=@{4}, {5}=@{5}, {6}=@{6}, {7}=@{7}, {8}=@{8} WHERE {9}=@{9}", mainForm.tableName,
                     list[1], list[2], list[3], list[4], list[5], list[6], list[7], list[8], list[0]);
-                form3 = new addUsersForm(list, query);
+                form3 = new addForm(list, query);
                 form3.Visible = true;
             }
         }
@@ -730,7 +664,7 @@ namespace InsuranceCompany
                                 
         private void registerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            form1 = new addUserForm();
+            form1 = new addUserForm(userType);
             form1.Visible = true;
             this.Hide();
         }
@@ -744,13 +678,40 @@ namespace InsuranceCompany
         
         private void addUserToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            form1 = new addUserForm();
+            form1 = new addUserForm(userType);
             form1.Visible = true;
             this.Hide();
         }
 
         private void refreshButton_Click(object sender, EventArgs e)
         {
+            FillingGrid(tableName);
+        }
+
+        private void deleteButton_Click(object sender, EventArgs e)
+        {
+            using (connection = new SqlConnection(connectionString))
+            using (SqlCommand command = new SqlCommand(string.Format("DELETE FROM {0} WHERE ID=@ID", tableName), connection))
+            {
+                connection.Open();
+
+                try
+                {
+                    command.Parameters.AddWithValue("@ID", int.Parse(deleteBox.Text));
+                    if (command.CommandText.StartsWith("DELETE FROM Users") && deleteBox.Text == "1")
+                        MessageBox.Show("You can't delete admin!");
+                    else if (userType == "agent" && command.CommandText.StartsWith("DELETE FROM Users"))
+                        MessageBox.Show("You can't delete any users!");
+                    else
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+                connection.Close();
+            }
+
             FillingGrid(tableName);
         }
     }

@@ -16,7 +16,7 @@ namespace InsuranceCompany
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new mainForm("admin"));
+            Application.Run(new mainForm("public", ""));
         }
     }
 }

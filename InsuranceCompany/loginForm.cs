@@ -21,14 +21,12 @@ namespace InsuranceCompany
         public loginForm()
         {
             InitializeComponent();
-
             connectionString = ConfigurationManager.ConnectionStrings["InsuranceCompany.Properties.Settings.InsuranceCompanyConnectionString"].ConnectionString;
         }
 
         private void loginButton_Click(object sender, EventArgs e)
         {
             string query = "Select * from Users where UserLogin='" + usernameBox.Text + "' and UserPassword='" + passwordBox.Text + "'";
-
             using (connection = new SqlConnection(connectionString))
             using (SqlCommand command = new SqlCommand(query, connection))
             {
@@ -40,7 +38,8 @@ namespace InsuranceCompany
                 {
                     string userType = reader["UserRole"].ToString();
                     userType = userType.TrimEnd(" ".ToCharArray());
-                    form = new mainForm(userType);
+                    string userID = reader[0].ToString();
+                    form = new mainForm(userType, userID);
                     form.Show();
                     Close();
                 }
@@ -54,7 +53,7 @@ namespace InsuranceCompany
 
         private void exitButton_Click(object sender, EventArgs e)
         {
-            form = new mainForm("public");
+            form = new mainForm("public", "");
             form.Show();
             Close();
         }
