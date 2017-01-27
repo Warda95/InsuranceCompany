@@ -11,18 +11,20 @@ namespace InsuranceCompany
         SqlConnection connection;
         string connectionString;
         string userType;
+        string createUserType;
 
-        public addUserForm(string inUserType)
+        public addUserForm(string inUserType, string increateUserType)
         {
             InitializeComponent();
             connectionString = ConfigurationManager.ConnectionStrings["InsuranceCompany.Properties.Settings.InsuranceCompanyConnectionString"].ConnectionString;
             userType = inUserType;
+            createUserType = increateUserType;
         }
         
         private void okButton_Click(object sender, EventArgs e)
         {
             string date = DateTime.Now.ToShortDateString();
-            string query = string.Format("INSERT INTO {0} VALUES (@UserLogin, @UserPassword, @UserRole, @UserFirstName, @UserLastName, @UserBirthdate, @UserMaritalStatus, @UserJob)", mainForm.tableName);
+            string query = "INSERT INTO Users VALUES (@UserLogin, @UserPassword, @UserFirstName, @UserLastName, @UserBirthdate, @UserMaritalStatus, @UserJob, @UserRole)";
 
             using (connection = new SqlConnection(connectionString))
             using (SqlCommand command = new SqlCommand(query, connection))
@@ -33,19 +35,19 @@ namespace InsuranceCompany
                 {
                     command.Parameters.AddWithValue("@UserLogin", usernameBox.Text);
                     command.Parameters.AddWithValue("@UserPassword", passwordBox.Text);
-                    command.Parameters.AddWithValue("@UserRole", "client");
                     command.Parameters.AddWithValue("@UserFirstName", nameBox.Text);
                     command.Parameters.AddWithValue("@UserLastName", secondNameBox.Text);
                     command.Parameters.AddWithValue("@UserBirthdate", birthDatePicker.Value.ToShortDateString());
                     command.Parameters.AddWithValue("@UserMaritalStatus", maritalStatusBox.Text);
                     command.Parameters.AddWithValue("@UserJob", jobBox.Text);
+                    command.Parameters.AddWithValue("@UserRole", createUserType);
                 }
                 catch (Exception)
                 {
-                    
+
                 }
-                
-                if (usernameBox.Text == "" || passwordBox.Text == "" || nameBox.Text == "" || secondNameBox.Text == "" || 
+
+                if (usernameBox.Text == "" || passwordBox.Text == "" || nameBox.Text == "" || secondNameBox.Text == "" ||
                     maritalStatusBox.Text == "" || jobBox.Text == "")
                     MessageBox.Show("You need to insert all the values");
                 else
@@ -53,17 +55,20 @@ namespace InsuranceCompany
                     try
                     {
                         command.ExecuteNonQuery();
+                        Close();
+                        if (createUserType == "client")
+                        {
+                            form = new mainForm("public", "");
+                            mainForm.tableName = "Category";
+                            form.Show();
+                        }
                     }
                     catch (Exception)
                     {
 
-                        throw;
                     }
-                }                    
+                }
             }
-            if (usernameBox.Text == "" || passwordBox.Text == "" || nameBox.Text == "" || secondNameBox.Text == "" ||
-                maritalStatusBox.Text == "" || jobBox.Text == "")
-                Close();
         }
 
         private void exitButton_Click(object sender, EventArgs e)

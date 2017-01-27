@@ -19,14 +19,14 @@ namespace InsuranceCompany
         List<string> list;
         string query;
         string userType;
-        string userLoginName;
+        string userID;
 
         public mainForm(string inUserType, string inUserID)
         {
             InitializeComponent();
             connectionString = ConfigurationManager.ConnectionStrings["InsuranceCompany.Properties.Settings.InsuranceCompanyConnectionString"].ConnectionString;
             userType = inUserType;
-            userLoginName = inUserID;
+            userID = inUserID;
 
             if (userType == "admin")
             {
@@ -123,15 +123,15 @@ namespace InsuranceCompany
         public void FillingGrid(string tableName)
         {
             if (userType == "client" && tableName == "Users")
-                query = string.Format("SELECT * FROM Users WHERE ID={0}", userLoginName);
+                query = string.Format("SELECT * FROM Users WHERE ID={0}", userID);
             else if (userType == "client" && tableName == "Application")
-                query = string.Format("SELECT * FROM Application WHERE UserID={0}", userLoginName);
+                query = string.Format("SELECT * FROM Application WHERE UserID={0}", userID);
             else if (userType == "client" && tableName == "Policy")
-                query = string.Format("SELECT * FROM Policy WHERE ApplicationID IN (SELECT ID FROM Application WHERE UserID={0})", userLoginName);
+                query = string.Format("SELECT * FROM Policy WHERE ApplicationID IN (SELECT ID FROM Application WHERE UserID={0})", userID);
             else if (userType == "client" && tableName == "Damage")
-                query = string.Format("SELECT * FROM Damage WHERE PolicyID IN (Select ID FROM Policy WHERE ApplicationID IN (SELECT ID FROM Application WHERE UserID={0}))", userLoginName);
+                query = string.Format("SELECT * FROM Damage WHERE PolicyID IN (Select ID FROM Policy WHERE ApplicationID IN (SELECT ID FROM Application WHERE UserID={0}))", userID);
             else if (userType == "client" && tableName == "Compensation")
-                query = string.Format("SELECT * FROM Compensation WHERE DamageID IN (SELECT ID FROM Damage WHERE PolicyID IN (Select ID FROM Policy WHERE ApplicationID IN (SELECT ID FROM Application WHERE UserID={0})))", userLoginName);
+                query = string.Format("SELECT * FROM Compensation WHERE DamageID IN (SELECT ID FROM Damage WHERE PolicyID IN (Select ID FROM Policy WHERE ApplicationID IN (SELECT ID FROM Application WHERE UserID={0})))", userID);
             else
                 query = string.Format("SELECT * FROM {0}", tableName);
 
@@ -661,7 +661,7 @@ namespace InsuranceCompany
                                 
         private void registerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            form1 = new addUserForm(userType);
+            form1 = new addUserForm(userType, "client");
             form1.Visible = true;
             this.Hide();
         }
@@ -675,9 +675,8 @@ namespace InsuranceCompany
         
         private void addUserToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            form1 = new addUserForm(userType);
+            form1 = new addUserForm(userType, "agent");
             form1.Visible = true;
-            this.Hide();
         }
 
         private void refreshButton_Click(object sender, EventArgs e)
