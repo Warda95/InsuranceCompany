@@ -112,7 +112,6 @@ namespace InsuranceCompany
                 rateToolStripMenuItem.Enabled = false;
                 usersToolStripMenuItem.Enabled = false;
             }
-
             FillingGrid(tableName);
         }
         
