@@ -47,7 +47,6 @@ namespace InsuranceCompany
                 policyTypeToolStripMenuItem.Enabled = true;
                 rateToolStripMenuItem.Enabled = true;
                 usersToolStripMenuItem.Enabled = true;
-                bool deleteUserAccess = true;
             }
             else if (userType == "agent")
             {
@@ -68,7 +67,6 @@ namespace InsuranceCompany
                 policyTypeToolStripMenuItem.Enabled = true;
                 rateToolStripMenuItem.Enabled = true;
                 usersToolStripMenuItem.Enabled = true;
-                bool deleteUserAccess;
             }
             else if (userType == "client")
             {
